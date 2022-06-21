@@ -31,13 +31,16 @@
     <div class="m-3">
       <label for="title" class="form-label">Title of Task</label>
       <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+      <p class=" text-danger" id="error-title"></p>
     </div>
     <div class="m-3">
       <label for="descripsion" class="form-label">Task Details</label>
       <input type="textarea" class="form-control" id="descripsion">
+      <p class=" text-danger" id="error-des"></p>
     </div>
     <button class="btn btn-primary mx-3" id="add">Add to list</button>
     <button class="btn btn-primary mx-3" id="clre" onclick="clr()">Clear all</button>
+
   </div>
   <div id="item" class="my-4 mx-3">
     <h2>Your Items</h2>
@@ -58,66 +61,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
     crossorigin="anonymous"></script>
-  <script>
-    let add = document.getElementById("add");
-    // changing table data with array
-    tableChanger = () => {
-      if (localStorage.getItem('itemJson') == null) {
-        return console.log("No work pending")
-        let tbody = document.getElementById("tbody")
-        tbody.innerHTML = ""
-      } else {
-        console.log("Table modified")
-        itemArrayStr = localStorage.getItem('itemJson');
-        itemArray = JSON.parse(itemArrayStr)
-        tbody.innerHTML = ""
-        itemArray.forEach((element, index) => {
-          tbody.innerHTML += `
-                    <tr>
-                      <th scope="row">${index + 1}</th>
-                      <td>${element[0]}</td>
-                      <td>${element[1]}</td>
-                      <td><button type="button" class="btn btn-danger btn-sm" id="del" onclick="del(${index})">Delet</button></td>
-                    </tr>`
-        })
-      }
-    }
-    tableChanger();
-
-
-    // taking inpute
-    add.addEventListener("click", () => {
-      let title = document.getElementById("title").value;
-      let des = document.getElementById("descripsion").value;
-      if (localStorage.getItem('itemJson') == null) {
-        let itemArray = [];
-        itemArray.push([title, des])
-        localStorage.setItem("itemJson", JSON.stringify(itemArray))
-      } else {
-        itemArrayStr = localStorage.getItem('itemJson');
-        itemArray = JSON.parse(itemArrayStr)
-        itemArray.push([title, des])
-        localStorage.setItem("itemJson", JSON.stringify(itemArray))
-      }
-      tableChanger();
-    })
-    // deleting a single task
-    del = (e) => {
-      itemArrayStr = localStorage.getItem('itemJson');
-      itemArray = JSON.parse(itemArrayStr)
-      itemArray.splice(e, 1)
-      localStorage.setItem('itemJson', JSON.stringify(itemArray))
-      tableChanger();
-    }
-    // clear all`
-    clr = () => {
-      if (confirm("Do you want to clear all task ")) {
-        localStorage.clear();
-        let tbody = document.getElementById("tbody")
-        tbody.innerHTML=""
-      }
-    }
-  </script>
+  <script src="js.js"></script>
 </body>
 
 </html>
