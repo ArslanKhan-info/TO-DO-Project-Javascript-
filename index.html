@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+  <ul class="nav nav-pills bg-dark p-3">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="#">To Do List</a>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link">About us</a>
+    </li>
+
+  </ul>
+  <div class=" p-2 text-dark text-center m-3">
+    <h2>To Do List</h2>
+  </div>
+
+  <div>
+    <div class="m-3">
+      <label for="title" class="form-label">Title of Task</label>
+      <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+    </div>
+    <div class="m-3">
+      <label for="descripsion" class="form-label">Task Details</label>
+      <input type="textarea" class="form-control" id="descripsion">
+    </div>
+    <button class="btn btn-primary mx-3" id="add">Add to list</button>
+    <button class="btn btn-primary mx-3" id="clre" onclick="clr()">Clear all</button>
+  </div>
+  <div id="item" class="my-4 mx-3">
+    <h2>Your Items</h2>
+    <table class="table mx-3">
+      <thead>
+        <tr>
+          <th scope="col">S. No.</th>
+          <th scope="col">Item Title</th>
+          <th scope="col">Descripsion</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+  <script>
+    let add = document.getElementById("add");
+    // changing table data with array
+    tableChanger = () => {
+      if (localStorage.getItem('itemJson') == null) {
+        return console.log("No work pending")
+        let tbody = document.getElementById("tbody")
+        tbody.innerHTML = ""
+      } else {
+        console.log("Table modified")
+        itemArrayStr = localStorage.getItem('itemJson');
+        itemArray = JSON.parse(itemArrayStr)
+        tbody.innerHTML = ""
+        itemArray.forEach((element, index) => {
+          tbody.innerHTML += `
+                    <tr>
+                      <th scope="row">${index + 1}</th>
+                      <td>${element[0]}</td>
+                      <td>${element[1]}</td>
+                      <td><button type="button" class="btn btn-danger btn-sm" id="del" onclick="del(${index})">Delet</button></td>
+                    </tr>`
+        })
+      }
+    }
+    tableChanger();
+
+
+    // taking inpute
+    add.addEventListener("click", () => {
+      let title = document.getElementById("title").value;
+      let des = document.getElementById("descripsion").value;
+      if (localStorage.getItem('itemJson') == null) {
+        let itemArray = [];
+        itemArray.push([title, des])
+        localStorage.setItem("itemJson", JSON.stringify(itemArray))
+      } else {
+        itemArrayStr = localStorage.getItem('itemJson');
+        itemArray = JSON.parse(itemArrayStr)
+        itemArray.push([title, des])
+        localStorage.setItem("itemJson", JSON.stringify(itemArray))
+      }
+      tableChanger();
+    })
+    // deleting a single task
+    del = (e) => {
+      itemArrayStr = localStorage.getItem('itemJson');
+      itemArray = JSON.parse(itemArrayStr)
+      itemArray.splice(e, 1)
+      localStorage.setItem('itemJson', JSON.stringify(itemArray))
+      tableChanger();
+    }
+    // clear all`
+    clr = () => {
+      if (confirm("Do you want to clear all task ")) {
+        localStorage.clear();
+        let tbody = document.getElementById("tbody")
+        tbody.innerHTML=""
+      }
+    }
+  </script>
+</body>
+
+</html>
